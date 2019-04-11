@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #container{
+            width:600px;
+            height:300px;
+            background:black;
+        }
+        .poligon,polyline{
+            fill:rgba(230,230,230,0.5);
+            stroke:lightgreen;
+            stroke-width:5px;
+        }
+    </style>
+</head>
+<body>
+   <svg id="container">
+        <polygon class="poligon" points="100,150 300,225 500,150 300,75"></polygon>
+        <polyline class="polyline" points="75,56 100,43 120,65 450,70 500,60"></polyline>
+    </svg>   
+</body>
+</html>
