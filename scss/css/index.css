@@ -1,0 +1,21 @@
+body .container p.text {
+  box-shadow: 2px 2px #666; }
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative; }
+  body .container {
+    width: 400px;
+    height: 600px;
+    background: pink; }
+    body .container:hover {
+      background: black; }
+    body .container p.text {
+      font: italic 20px bold;
+      color: #B30001;
+      width: 200px;
+      height: 100px;
+      background: lightblue; }
+
+/*# sourceMappingURL=index.css.map */

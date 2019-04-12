@@ -1,0 +1,33 @@
+$width:200px;
+$height:100px;
+$my-color:#B30001;
+
+%text-box{
+    box-shadow:2px 2px #666;
+}
+
+@mixin text-container($color:$my-color){
+    color:$my-color;
+    width:$width;
+    height:$height;
+    background:$color;
+}
+
+body{
+    margin:0;
+    padding:0;
+    position:relative;
+    .container{
+        width:400px;
+        height:600px;
+        background:pink;
+        &:hover{
+            background:black;
+        }
+        p.text{
+            font:italic 20px bold;
+            @include text-container(lightblue);
+            @extend %text-box;
+        }
+    }
+}
