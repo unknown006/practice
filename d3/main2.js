@@ -46,8 +46,8 @@ function draw(){
     })
     .attr("r",r)
     .style("fill","pink")
-    .on("click",function(){
-        alert("hahahahahahahah")
+    .on("click",function(d,i){
+        alert("下标"+i)
     })
 };
 //添加列的按钮
