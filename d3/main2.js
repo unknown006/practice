@@ -50,7 +50,7 @@ circleDrag.on("dragstart",function(d,i){
     if(targetName=="circle" && draggingLine.source!=draggingLine.target){
         draggingLine.x2=Number(d3.select(circle).attr("cx"));
         draggingLine.y2=Number(d3.select(circle).attr("cy"));
-        //检测是否已存在线
+        //检测是否已存在
         if(lines.length>0){
             let canAdd=!lines.some(function(elem,i,arr){
                 let isRepeatX1=draggingLine.x1==arr[i].x1;
@@ -77,7 +77,7 @@ circleDrag.on("dragstart",function(d,i){
     }
 })
 
-//更新数据的函数
+//更新节点数据的函数
 function computeNode(){
     let len=nodes.length;
     let step=width/len;
@@ -115,7 +115,7 @@ function updateLineRelation(type,node,index){
             //更新线数据
             updateLine();
         }else{
-            alert("出错了！！需要遍历内容")
+            alert("出错了！")
         }
     }else if(type.toLowerCase()=="delete"){
         //
@@ -154,7 +154,7 @@ function updateLine(){
 function drawNodes(){
     let svg=d3.select("svg");
     //let data=nodes.flat();
-    //清除画布
+    //清除画布的节点
     svg.selectAll("circle").remove();
     //绑定数据
     let node=svg.selectAll("circle").data(flatedNodes);
@@ -241,6 +241,10 @@ function drawLines(){
         stroke:"white",
     })
     .style("stroke-width",r/2)
+    .on("dblclick",function(d,i){
+        lines.splice(i,1);
+        drawLines();
+    })
 }
 //拖拽中的线画图函数
 function drawDraggingLine(){
