@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            background:black;
+        }
+    </style>
+</head>
+<body>
+    <div id="container" style="font-size:40px;width:800px; margin:200px auto;text-align:center;"></div>
+    <script>
+        let div=document.getElementById("container");
+        let str="苟利国家生死以，岂因福祸避趋之。"
+        let fontList=str.split('');
+        let objList=[];
+        let count=0;
+
+        function getRandomColor(){
+            let r=Math.round(Math.random()*255);
+            let g=Math.round(Math.random()*255);
+            let b=Math.round(Math.random()*255);
+            let alpha=Math.random();
+            return `rgba(${r},${g},${b},${1})`;
+        };
+
+        for(let index=0;index<fontList.length;index++){
+            let obj={
+                msg:fontList[index],
+                color:'',
+                _color:'',
+            }
+            Object.defineProperties(obj,{
+                color:{
+                    get(val){
+                        return this._color;
+                    },
+                    set(val){
+                        this._color=val;
+                        for(let i=0;i<objList.length;i++){
+                            if(objList[i] && objList[i].msg==this.msg){
+                                div.children[i].style.color=this.color;
+                            }
+                        }
+                    },
+                },
+            })
+            //定时器改颜色
+            setInterval(function(){
+                obj.color=getRandomColor();
+            },500);
+            //定时器刷新字
+            setTimeout(function(){
+                console.log(objList,111111111111)
+                div.innerHTML='';
+                objList.push(obj);
+                let html='';
+                for(let itm of objList){
+                    html+=`<span style="color:${itm.color}">${itm.msg}</span>`;
+                }
+                div.innerHTML=html;
+            },(index+1)*1000);
+        };      
+    </script>
+</body>
+</html>

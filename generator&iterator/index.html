@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let str = "abcdefg";
+        Object.prototype[Symbol.iterator]=function(){
+            let that=this;
+            let keys=Object.keys(that);
+            let i=0;
+            return {
+                next(){
+                    let res=i<keys.length ? {value:[that[keys[i]],keys[i]],done:false} : {done:true};
+                    i++;
+                    return res;
+                }
+            }
+        }
+
+        function createObjByStr(str) {
+            function* generator(str) {
+                for (let i = 0; i < str.length; i++) {
+                    yield str.slice(i, i+1);
+                }
+            }
+            let obj={};
+            for (let item of generator(str)) {
+                obj[item]=function(){
+                    return item;
+                }
+            }
+            return obj;
+        }
+
+        for(let [value,key] of createObjByStr(str)){
+            console.log(key,value());
+        }
+    </script>
+</body>
+
+</html>

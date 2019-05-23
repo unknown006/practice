@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //注意，Symbol 值作为对象属性名时，不能用点运算符。
+        let a=Symbol('outer');
+        let b=Symbol.for('for');
+        let c=Symbol('for');
+        let obj={[a]:123,[b]:'beforeChange'};
+        {
+            let a=Symbol('inner');
+            obj[a]=456;
+            obj[Symbol.for('for')]='afterChangeFor';
+            obj[c]='afterChange'
+            console.log(obj[a],a.description)
+        }
+        console.log(obj[a],a.description)
+        console.log(obj[b],b.description)
+        console.log(obj[c],Symbol.keyFor(b));
+        console.log(Symbol.for('for')===b,Symbol.for('for')===c);
+        console.log(Symbol.keyFor(b)===b.description,Symbol.keyFor(b)===c.description);
+        // 新Object的静态方法获取一个对象中所有的Symbol值类型的属性名的值
+        let symbols=Object.getOwnPropertySymbols(obj);
+        let names=Object.getOwnPropertyNames(obj)
+        let all=Reflect.ownKeys(obj)
+        console.log(symbols)    //获取到Symbol('xxxx')
+        console.log(names)      //获取不到任何Symbol类型
+        console.log(all)        //可获取到一般属性名和Symbol类型的属性名
+        
+        
+        //内置Symbol值
+        class A{
+            constructor(num){
+                return new Number(num)
+            }
+            static [Symbol.hasInstance](data){
+                return data%2==0;
+            }
+        }
+
+        let a1=new A(2),a2=new A(1);
+        console.log(a1,a2)
+        console.log(a1 instanceof A,a2 instanceof A);
+    </script>
+</body>
+</html>

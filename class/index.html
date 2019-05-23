@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body> 
+    <script>
+        //构造器返回一个新对象
+        //class写法中不能像对象一样用逗号分隔(不要逗号)
+        class Test{
+            constructor(){
+                return {};
+            }
+        }
+        console.log(new Test() instanceof Test) //false
+
+        //"类" 必须使用 new 调用 否则报错 与es5构造函数不一致
+        //Test();
+
+        // __proto__ 并不是语言本身的特性，这是各大厂商具体实现时添加的私有属性，
+        // 虽然目前很多现代浏览器的 JS 引擎中都提供了这个私有属性，但依旧不建议在
+        // 生产中使用该属性，避免对环境产生依赖。生产环境中，我们可以使用
+        //  Object.getPrototypeOf 方法来获取实例对象的原型，
+        //  然后再来为原型添加方法/属性。 
+
+        //取值函数和存值函数(对应es5存取器属性)
+        class Test2{
+            constructor(name){
+                this.fullName=name;
+            }
+            get name(){
+                return this.fullName;
+            }
+            set name(val){
+                if(val.length<20){
+                    this.fullName=val;
+                }else{
+                    throw new Error('too long!!!')
+                }
+            }
+            getFirstName(){
+                let fullName=this.fullName;
+                let lastNameFirstStr=fullName.match(/[A-Z]/g)[1];
+                return fullName.slice(0,fullName.indexOf(lastNameFirstStr));
+            }
+            getLastName(){
+                let fullName=this.fullName;
+                let lastNameFirstStr=fullName.match(/[A-Z]/g)[1];
+                return fullName.slice(fullName.indexOf(lastNameFirstStr),fullName.length);
+            }
+        }
+        let me=new Test2('WangChaofan');
+        console.log(me.getFirstName(),me.getLastName());
+        me.name="WfsfgwefwgwGs";
+        console.log(me.name);
+
+        let descriptor=Object.getOwnPropertyDescriptor(Test2.prototype,'name');
+        //in 运算符可以检测到不可枚举的属性
+        console.log('get' in descriptor,'fsdfsd' in descriptor);
+
+        //也可使用表达式的方式来定义类
+        const test3=class A{
+            constructor(value){
+                this.value=value;
+            }
+        }
+        //可省略class名,名只针对"类"的内部
+        const test4=class {
+            constructor(){
+
+            }
+        }
+        //也可直接使用new 立即获得一个类的实例
+        const test5=new class{  
+            constructor(){
+
+            }
+        }
+        let a=new test3(123)
+        console.log(a.value,test3.name/*,A.name*/,Test2.name) //A.name 会报错
+
+        // 特征
+        // 1."类"的内部 自动启动严格模式;
+        // 2.不存在类的提升 与es5不同;
+        // 3.class本质上是es5构造函数的一层包装,有些特性可以通用 比如name属性;
+        // 4.在一个方法前加上 * 表示为一个generator函数;
+        // 5.this默认指向实例 有static关键字的静态方法指向类本身,
+        //   如果将实例方法解构出来脱离实例上下文对象单独调用会报错,
+        //   由于类中默认使用严格模式 所以脱离上下文对象的this指向为undefined;
+
+        //关于this的验证(之前的理论正确)
+        let obj={
+            getThis:()=>{
+                return this;
+            }
+        }
+        console.log(obj.getThis());
+        //类中箭头函数this验证
+        class Test3{
+            constructor(){
+                //this指向为与构造器函数被调用时的this指向相同,构造器指向为新创建的对象
+                this.getThis2=()=> this;
+                //this为永久固定绑定的构造器的this
+                this.getThis3=this.getThis.bind(this);
+            }
+            getThis(){
+                return this;
+            }
+        }
+        let test6=new Test3()
+        let {getThis,getThis2,getThis3}=test6
+        console.log(getThis(),getThis2(),getThis3());
+
+        //类中的属性和方法默认为公用,私有属性和私有方法需要在属性或者方法名称前加上"#"(提案阶段);
+        //实例属性简写法可以不写constructor(未实现);
+        //因此目前只能像下面这样写
+        class Test4{
+            constructor(){
+                this.a=1;
+            }
+            getA(){
+                return this.a;
+            }
+            static getA(){
+                return this.a;
+            }
+        }
+        Test4.a=2;
+        let test7=new Test4()
+        console.log(Test4.getA(),test7.getA());
+
+        
+        
+        //new.target属性为es6新提出的属性 必须在函数内使用否则报错,
+        //使用new调用该函数会返回当前构造器函数
+        //class语法中会返回当前"类"
+        //class 存在继承 若在父类中定义new.target则在集成后会返回子类;
+        //可利用new.target特性来在父类中判断 实现抽象类
+        class Test5{
+            constructor(){
+                console.log(new.target);  //打印类
+            }
+        }
+        function Test6(){
+            console.log(new.target);      //打印构造函数
+        }
+        class Test7 extends Test5{
+            constructor(){
+                super();                  //打印子类
+            }
+        }
+        let test8=new Test5(),test9=new Test6(),test10=new Test7();
+
+        /*--------------------------------------------------------------------------------------*/
+        
+        //类的继承
+
+        //在子类访问this或者return之前必须调用super函数执行父类的constructor来获得子类的this,
+        //子类实例是基于父类实例的扩展,得通过父类的this来完成塑造,所以依赖于父类,即子类this访问必须在super调用后;
+        //es5继承与es6的区别:
+        //es5是先创建子类的实例对象this然后再将父类的方法添加上去;
+        //es6是先将父类的方法和属性添加到实例对象this然后再用子类的构造器进行修改this;
+        //若子类没有constructor方法 则会默认添加constructor并调用super;
+        //父类的静态方法也会被子类继承
+        class Test8 {
+            constructor(a,b){
+                this.sum=a+b;
+            }
+            static plus(val){
+                return val+1;
+            }
+        }
+        class Test9 extends Test8{
+            constructor(a,b,c){             
+                super(a,b)
+                this.res=this.sum*c
+            }
+        }
+        let test11=new Test9(1,2,3);
+        console.log(test11.sum,test11.res);  //3,9  注释掉子类的constructor得到3,undefined;
+        console.log(Test9.plus(test11.sum))  //继承父类静态  打印结果为4
+        //Object.getPrototypeOf 方法
+        let proto=Object.getPrototypeOf(test11);
+        console.log(proto)                  //会返回"类"
+        function Test10(){
+            Test10.prototype.sum=function(){
+                return this.a+this.b;
+            }
+        }
+        function Test11(a,b,c){
+            this.a=a;
+            this.b=b;
+            this.c=c;
+            Test11.prototype.res=function(){
+                return this.sum()*c;
+            }
+        }
+        Test11.prototype=Object.create(new Test10());
+        Test11.prototype.constructor=Test11;
+        let test12=new Test11(1,2,3);
+        console.log(test12.sum(),test12.res());
+        console.log(Object.getPrototypeOf(test12),test12.constructor)
+        
+        //super
+
+        //super可以当做函数调用，也可当做对象访问;
+        //super当做函数调用时表示为父类的constructor;
+        //super中this指向为子类的实例相当于Parent.prototype.constructor.call(this)
+        //super只能在子类的constructor中调用;
+
+        //作为对象,实例方法中指向父类的原型对象,静态方法中指向父类
+        //constructor中可以两用(调用,对象)
+        //子类原型方法中的super只能访问父类原型对象,不能访问父类的实例
+        class Test12{
+            constructor(){
+                console.log(new.target.name)
+            }
+            fun(){
+                11111
+            }
+            static fun(){
+                222222
+            }
+        }
+        class Test13 extends Test12{
+            constructor(){
+                super();
+                console.log(super.fun)
+            }
+            fun(){
+                console.log(super.fun,'parent-proto')
+            }
+            static fun(){
+                console.log(super.fun,'parent-static')
+            }
+        }
+        let test13=new Test13();
+        Test13.fun();
+        test13.fun();
+        
+        
+        //子类中原型方法通过super调用父类原型方法的时候 父类原型方法中的this会指向子类实例
+        //在构造器中通过super进行属性赋值操作 则super指向子类的this;
+        //在子类的静态方法中this指向子类,super指向父类。(不是实例);
+        //子类方法中用super调用父类方法,父类方法中的this指向子类或子类实例,
+        //由于子类会继承父类的静态方法以及实例属性,所以当子类没有相对应属性或者方法时,会使用父类继承下来的实例属性或静态方法(256,271行验证),若有相对应的实例属性或静态方法会使用自身的;
+        class Test14{
+            constructor(){
+                this.x=1;
+                this.l=10;
+            }
+            fun(){
+                console.log(this,22222222)
+                console.log(this.l)
+            }
+            static fun3(){
+                console.log(this.x)
+            }
+        }
+        Test14.x=4;
+        class Test15 extends Test14{
+            constructor(){
+                super();
+                this.x=2;
+                super.y=3;                    //赋值时指向子类实例
+                console.log(super.y,this.y);   //undefined 3  
+                console.log(super.x);           //undefned ??????   疑问:super不能直接打印,为什么是undefined?在constructor里以对象方式使用只能赋值?
+                console.log(super.valueOf());  //利用valueOf方法显式指定super才能将super打印,可见super在constructor中作为对象指向子类实例
+                console.log(this.l)
+            }
+            fun(){
+                super.fun();
+                super.fun2=function(){
+                    console.log(4444444)
+                }
+                super.constructor.fun=function(){
+                    console.log(5555555)
+                }
+                console.log(333333)
+            }
+            static fun(){
+                console.log(super.x);
+                super.fun3();            
+            }
+        }
+        Test15.x=5;
+        let test14=new Test15();
+        test14.fun();
+        test14.fun2();
+        Test14.fun();
+        Test15.fun();
+        //由于对象总是继承得来的,所以super关键字也可以不限于class中使用;
+        let object={
+            fun(){
+                return super.constructor.keys(this);
+            }
+        }
+        console.log(object.fun())
+    </script>
+</body>
+</html>

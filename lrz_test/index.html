@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <input id="uploadFile" type="file" style="display:none;"/>
+    <button onclick="upload()">3233513513</button>
+    <button id="test">测试事件对象</button>
+    <script>
+        document.getElementById('uploadFile').addEventListener('change',inputChangeHandle,false)
+        function inputChangeHandle(e){
+            //利用change事件获取文件对象
+           let file=e.target.files[0];
+           //压缩文件
+           lrz(file,{
+               width:20,
+           }).then((res)=>{
+               //定义保存为二进制数据的函数
+              function dataUrlToBlob(dataUrl){
+                let arr=dataUrl.split(',');
+                let mime=arr[0].match(/:(.*?);/);
+                let bstr=atob(arr[1]);
+                console.log(typeof bstr)
+                let n=bstr.length;
+                let u8arr=new Uint8Array(n);
+                while(n--){
+                    u8arr[n]=bstr.charCodeAt(n);
+                }
+                return new Blob([u8arr],{type:mime})
+              }
+             let res2=dataUrlToBlob(res.base64);
+             let reader=new FileReader();
+             reader.readAsText(res2);
+             reader.onload=function(e){
+                 console.log(e.target.result)
+             }
+           })
+        }
+        function upload(){
+            let a=document.getElementById('uploadFile');
+            a.click();
+            //document.querySelector('#uploadFile').click();
+        }
+    </script>
+    <script src="node_modules/lrz/dist/lrz.bundle.js"></script>
+</body>
+</html>
