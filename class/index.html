@@ -292,13 +292,155 @@
         test14.fun2();
         Test14.fun();
         Test15.fun();
+
         //由于对象总是继承得来的,所以super关键字也可以不限于class中使用;
+        //经验证一个对象调用valueOf方法之后地址和本身是相同的,而在类的实例方法中调用super.valueOf()===Class.prototype为false;
+        //由此可见super关键字不能直接代表实例的原型对象而是一个复制后的对象用于获取原型对象中的属性(只能从原型get),
+        //结论：super在方法中不能用于添加属性(constructor中可以),但可以添加方法,并且添加的方法无法通过类或父类的原型对象访问到,添加的方法为实例中的自有方法(非继承),不能修改原型对象,(super具有单向性,可以向下修改,不能向上修改)
+        //总结:super为set操作时 可以修改实例(super在赋值时只能指向this?)不能修改任何原型,为get操作时是父类对应对象的复制对象;
+        //进一步总结:通过子类中静态方法使用super赋值检测 最终赋值到子类的静态属性,所以综上所述 赋值行为与this保持一致;
+
+        //大总结:super在get操作时指向父类对应对象(实例方法为父类原型,静态方法为父类本身,构造器中为this实例,且获取值无效为undefined),
+        //      super在set操作时永远指代类中的this(构造器中的super指向this实例,实例方法中指向实例,静态方法中指向类本身)
+
+        //关于this行为
+        //若子类继承了父类,父类构造器中this会指向子类实例,父类实例方法中this会随着子类this指向最终子类实例
+        //若子类中通过super直接调用父类中的静态方法中则父类静态方法中this会改为指向子类
+        //通过子类中实例方法super.constructor.xxxx 或 静态方法中super.prototype.constructor.xxxxx (非super直接调用) 来调用父类静态方法则父类静态方法中this会遵循原来非继承的规则;
+        
+        Object.prototype.a=10;
         let object={
             fun(){
-                return super.constructor.keys(this);
+                super.a=20;         //无效
+                super.fun2=function(){
+                    return 20;
+                }
+                return super.a;     //10
             }
         }
-        console.log(object.fun())
-    </script>
+        console.log(object.fun(),object.fun2(),/*Object.prototype.fun2()*/object.hasOwnProperty('fun2'))  //理论结果应为 "10 20 20"  实际结果为"10 20 报错" (由于报错所以注释掉,检测时放开)
+        //验证调用valueOf方法后的对象是否还与自身是同一个对象;
+        console.log(object.valueOf()===object)   //true 是同一个对象
+        //类中的super验证
+        class Test16{
+            constructor(){
+                this.a=1;
+                this.b=2;
+            }
+            test9(){
+                this.c=4;
+                return this;
+            }
+            static test4(){
+                555555
+            }
+            static test6(){
+                super.test7=200;
+            }
+            static test10(){
+                return this;
+            }
+        }
+        class Test17 extends Test16{
+            constructor(){
+                super();
+                this.c=3;
+            }
+            test(){
+                super.test2=function(){
+                    return 20;
+                };
+                //console.log(Test16.prototype.test2())   //理论上此行结果应与331一致,但为报错
+
+                return this.test2();
+            }
+            test8(){
+               let x= super.test9();
+               return x;
+            }
+            test11(){
+                let x=super.constructor.test10();
+                return x;
+            }
+            static test12(){
+                let x=super.test10();
+                return x;
+            }
+            static test13(){
+                let x=super.prototype.constructor.test10();
+                return x;
+            }
+            static test3(){
+                super.test5=100;
+                console.log(super.test4===Test16.test4)  //true
+            }
+        }
+        let test15=new Test17();
+        console.log(test15.test());
+        Test17.test3();
+        //检测test5属性添加到了哪
+        console.log(Test16.test5);   //undefined
+        console.log(test15.test5);   //undefined
+        console.log(Test17.test5);   //100
+        //检测test7属性
+        Test16.test6();
+        console.log(Test16.test7);   //200     
+        //检测this指向
+        console.log(test15.test8()===test15);  //true  
+        console.log(test15.test11()===Test17)   //false
+        console.log(test15.test11(),Test17)     //Test16 Test17 
+        console.log(Test17.test12()===Test17)   //true
+        console.log(Test17.test13()===Test17)   //false
+        console.log(Test17.test13(),Test17)     //Test16 Test17
+
+
+        //实例__proto__和prototype属性
+        //实例的__proto__===类的prototype
+        //es5中继承需要手动修改constructor,es6中为自动指向用于实例化的类
+        //es5中构造函数的__proto__指向Function.prototype,es6中子类的__proto__指向父类(不再指向Function.prototype);
+        function Test18(){
+
+        }
+        function Test19(){
+
+        }
+        Test19.prototype=Object.create(new Test18());
+        Test19.prototype.constructor=Test19;    //es5继承需要手动修改constructor;
+        let test16=new Test19();
+        console.log(test16.constructor)   //原本为Test18  修改后为Test19
+        console.log(test16.__proto__)     //Test18;
+        console.log(test16.__proto__===Test19.prototype)  //true;
+        console.log(Test19.prototype.__proto__.constructor===Test18) //true;
+        console.log(Test19.__proto__===Test18)   //false
+        console.log(Test19.__proto__===Function.prototype); //true
+
+        class Test20{
+            constructor(){
+                
+            }
+        }
+        class Test21 extends Test20{
+            constructor(){
+                super();
+            }
+        }
+        class Test22 extends Test21{
+            constructor(){
+                super();
+            }
+        }
+        let test17=new Test22();
+        let test18=new Test21();
+        console.log(test17.__proto__);   //Test21 __proto__指向最近一层父类的原型对象
+        console.log(test17.__proto__.constructor)  //Test22 __proto__的constructor属性指向最终用于实例化的子类
+        console.log(test17.__proto__===Test22.prototype) //true;
+        console.log(test17.__proto__.constructor.prototype===Test22.prototype)  //true
+        console.log(test18.__proto__.constructor===Test20)  //false
+        console.log(test18.__proto__===Test21.prototype)    //true
+        console.log(Test22.prototype.__proto__.constructor===Test21)  //true;
+        console.log(Test22.__proto__===Test21)   //true;
+        console.log(Test22.__proto__===Function.prototype)  //false
+
+    </script>  
 </body>
 </html>

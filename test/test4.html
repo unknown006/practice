@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // let obj={a:1,b:2,c:3,d:4};
+        // let arr=[];
+        // for(let key in obj){
+        //     arr.push({[key]:obj[key]});
+        // }
+        
+        let obj={
+            a:1,
+            b:2,
+            c:3,
+            d:4,
+        }
+        let obj2=Object.assign({},obj);
+        obj2.a=1;
+        //这个调用映射到你点击按钮触发
+        let isChanged=checkChange(obj,obj2);
+        function checkChange(obj,obj2){
+            if(Object.keys(obj).length!==Object.keys(obj2).length){
+                return true;
+            }else{
+                for(let key in obj2){
+                    if(obj[key]!==obj2[key]){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        if(isChanged){
+            alert('changed!')
+        }else{
+            alert('unchange~')
+        }
+    </script>
+</body>
+</html>
