@@ -43,10 +43,64 @@
                 return data%2==0;
             }
         }
-
+        class B extends Array{
+            constructor(...arr){
+                super(...arr);
+            }
+            get [Symbol.isConcatSpreadable](){
+                return false;
+            }
+            static get [Symbol.species](){
+                return Array;
+            }
+        }
+        //字符串的正则API均适用
+        class C{
+            [Symbol.match](str){
+                return 'wangchaofan'.indexOf(str);
+            }
+        }
+        class D{
+            [Symbol.toPrimitive](val){
+                switch(val){
+                    case 'number':
+                        return 100;
+                    case 'string':
+                        return 'obj';
+                    break;
+                    case 'default':
+                        return '???';
+                    default:
+                        throw new Error('$#^#^#%&%&&@$%@%');
+                }
+            }
+        }
+        class E{
+            get [Symbol.toStringTag](){
+                return '??????';
+            }
+        }
         let a1=new A(2),a2=new A(1);
+        let b1=new B(1,2,3);
+        let c1=new C();
+        let d1=new D();
+        let e1=new E();
+        //A
         console.log(a1,a2)
         console.log(a1 instanceof A,a2 instanceof A);
+        //B
+        console.log(b1);
+        console.log([1].concat(b1))
+        console.log(b1.slice(0) instanceof B)
+        //C
+        console.log('c'.match(new C()));
+        //D
+        console.log(d1*5,d1+'',String(d1));
+        //E
+        console.log(e1.toString())
+        //复习
+        let x='wangChaofan'.match(/[A-Z]/g);
+        console.log(x)
     </script>
 </body>
 </html>
