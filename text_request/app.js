@@ -39,6 +39,7 @@ app.get('/text',(req,res)=>{
 app.post('/uploadImg',(req,res)=>{
     upload(req,res,function(err){
         let obj={
+            data:123,
             status:200,
         }
         res.writeHead(200,{

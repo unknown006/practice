@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //Proxy
+        //要起作用必须对proxy实例进行操作，对目标对象操作没有代理效果
+        let obj={a:1,b:2,c:0}
+        let proxyObj=new Proxy(obj,{
+            get(target,key,receiver){
+                return target[key];
+            },
+            set(target,key,value,receiver){
+                target[key]=value;
+            },
+        })
+        console.log(proxyObj.a)
+        proxyObj.c=100
+        console.log(proxyObj)
+        //验证是否是原对象
+        let proxyObj2=new Proxy(obj,{});
+        console.log(proxyObj2.a,proxyObj2==obj)  //1 false (不是原对象)
+
+
+
+        //proxy作为原型对象(es6 无效 es6类的prototype为只读？)
+        class A{
+            constructor(){
+            
+            }
+            fun(){
+                console.log('fun!')
+            }
+        }
+        A.prototype.a=10;
+        A.prototype=new Proxy(A.prototype,{
+            get(target,key){
+                console.log('get!')
+                return target[key]
+            },
+            set(target,key,value){
+                console.log('set!')
+                target[key]=value;
+            },  
+        })
+        let a1=new A();
+        console.log(a1.a)                 //(es6类语法无效)
+        //proxy作为原型对象(es5 有效)
+        function B(){}
+        B.prototype.a=20;
+        B.prototype.fun=function(){
+            console.log('fun!')
+        }
+        B.prototype=new Proxy(A.prototype,{
+            get(target,key){
+                console.log('get!')
+                return target[key]
+            },
+            set(target,key,value){
+                console.log('set!')
+                target[key]=value;
+            },  
+        })
+        let b1=new B();
+        console.log(b1.a)
+        b1.fun();                       //作为函数调用会触发get
+
+        //共13中拦截操作
+        function C(x,y){
+            if(Object.getOwnPropertyNames(this).length>0){
+                return this.b+this.c;
+            }else{
+                this.x=x;
+                this.y=y;
+            }
+        }
+        C.a=5;
+        C.haha=1000;
+        let proxyC=new Proxy(C,{
+            get(target,key,receiver){       //针对对象属性
+                return target[key];   
+                console.log('get')
+            },
+            set(target,key,value,receiver){   //针对对象属性
+                target[key]=value;
+            },
+            has(target,key){                  //拦截 in 运算符
+                return !(key in target);      //结果相反
+            },
+            deleteProperty(target,key){                  //拦截delete运算符
+            console.log(key)
+                if(key=='haha'){
+                    delete target[key];
+                    return true;
+                }else{
+                    return false;
+                }
+            },
+            apply(target,thisBinding,args){     //函数调用
+                console.log(thisBinding);        
+                thisBinding=obj                 //赋值不能直接改变原函数this 绑定
+                // return args.reduce((res,elem)=>{     //如果有return 则原函数return 会无效
+                //     return res+elem
+                //  },0)
+                return target.call(thisBinding,args)  //102
+            },
+            construct(target,args){             //作为构造函数调用
+                console.log(this)
+                let obj={}              //this只想为proxyC的handler
+                obj.a=args[0];                  
+                //return obj;                  //可以指定返回对象,会覆盖掉原函数new指向的实例
+                return new target(...args); 
+            },
+        })
+        let c1=new proxyC(1,2);
+        console.log(proxyC(1,2))
+        console.log(c1.x);         //1
+        console.log('a' in proxyC,'b' in proxyC)    //false,true;
+        console.log(delete proxyC.a,delete proxyC.haha,proxyC.a,proxyC.haha)  
+    </script>
+</body>
+</html>

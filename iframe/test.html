@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container{
+            width:440px;
+            display:flex;
+            flex-flow:row wrap;
+            justify-content: space-between;
+            /* align-items: center; */
+            align-content:space-between;
+        }
+        .container>div{
+            width:100px;
+            height:100px;
+            background:black;
+            border:1px solid #BB3333;
+        }
+        .container>div:nth-child(4)~div{
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- <select name="" id="">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select> -->
+    <div class="container">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <iframe id="frame1" width="100%" src="./test2.html" sandbox="allow-same-origin allow-scripts" frameborder="0" ></iframe>
+    <script>
+        // let frame=document.getElementById("frame1");
+        // frame.onload=function(e){
+        //     e.target.style.height=e.target.contentDocument.documentElement.scrollHeight+"px"
+        // }
+        function getRes(){
+            let a=''
+            let res=test();
+            function* test(){
+                a=yield null;                      
+            }
+            res.next()
+            res.next(456)            
+            return Promise.resolve(a) ;
+        }   
+        
+        
+        getRes().then((res)=>{
+            console.log(res)
+        })
+    </script>
+</body>
+</html>

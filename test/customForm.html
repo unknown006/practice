@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        input[type=radio] {
+            width: 200px;
+            height: 200px;
+            background: url('./椭圆 1@2x.png');
+            background-size: cover;
+        }
+
+        input[type=radio].checked {
+            background: url('./勾 (1)@2x.png');
+        }
+    </style>
+</head>
+
+<body>
+    <input class="radio" type="radio" value="1" name="a">
+    <input class="radio" type="radio" value="2" name="a">
+    <script>
+        function getSiblings(elem) {
+            let arr = [];
+            let parent = elem.parentElement;
+            [...parent.children].forEach((elem2) => {
+                if (elem != elem2) {
+                    arr.push(elem2);
+                }
+            })
+            return arr;
+        }
+        let radio = [...document.getElementsByClassName('radio')];
+        radio.forEach((elem) => {
+            elem.onclick = function () {
+                if (!this.className.includes('checked')) {
+                    this.className += ' checked';
+                    let siblings = getSiblings(this);
+                    siblings.forEach((elem3) => {
+                        elem3.className = elem3.className.replace(/checked/, '');
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

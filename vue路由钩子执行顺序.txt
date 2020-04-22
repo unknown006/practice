@@ -1,0 +1,12 @@
+1.导航触发
+2.执行上一个离开的钩子beforeRouteLeave
+3.执行全局beforeEach
+4.执行重用组件的beforeRouteUpdate
+5.执行路由独享beforeEnter
+6.解析异步路由组件
+7.执行beforeRouteEnter
+8.执行beforeRouteResolve
+9.导航被确认
+10.执行afterEach
+11.执行dom更新
+12.执行next中的回调

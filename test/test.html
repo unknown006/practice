@@ -16,6 +16,20 @@
             str=back+forward;
             document.getElementsByTagName("span")[0].innerHTML=str;
         },500)
+
+        console.log(Array.__proto__===Function.prototype,Array.prototype.__proto__===Object.prototype)
+
+        function Test(){
+
+        }
+        Test.prototype.a=10;
+        let test=new Test();
+        test.__proto__.b=20;
+        console.log(Test.prototype)
+
+
+        let obj={a:1,b:2};
+        console.log('wangchaofan'.slice(0,3))
     </script>
 </body>
 </html>

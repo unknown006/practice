@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>浏览器定位</title>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.4&key=ad26780bfaabf0ca27ae6078e2e81682">
+    </script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <style>
+        .marker-gou{
+            width:20px;
+            height:20px;
+        }
+        .marker-gou>img{
+            width:100%;
+            height:100%;
+        }
+        #refresh{
+            position:fixed;
+            bottom:50px;
+            right:50px;
+        }
+    </style>
+<body>
+    <div id='container'></div>
+    <button id="refresh">刷新宝箱</button>
+    <script type="text/javascript">
+        /***************************************
+                    由于Chrome、IOS10等已不再支持非安全域的浏览器定位请求，为保证定位成功率和精度，请尽快升级您的站点到HTTPS。
+                    ***************************************/
+        var map, geolocation,marker,markerList;
+        var isInit=true;
+        var content = '<div class="marker-gou"><img src="./icon_task_radio@2x.png" alt="...."></div>';
+        //加载地图，调用浏览器定位服务
+        map = new AMap.Map('container', {
+            zoom:20,//级别
+            resizeEnable: true
+        });
+
+        map.plugin('AMap.Geolocation', function () {
+            geolocation = new AMap.Geolocation({
+                enableHighAccuracy: true, //是否使用高精度定位，默认:true
+                timeout: 10000, //超过10秒后停止定位，默认：无穷大
+                showButton: false,
+                buttonOffset: new AMap.Pixel(10, 20), //定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                zoomToAccuracy: false, //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+                panToLocation: false,
+                buttonPosition: 'RB',
+                showMarker: true, //定位成功后在定位到的位置显示点标记，默认：true
+                showCircle: true,
+            });
+            map.addControl(geolocation);
+            geolocation.getCurrentPosition();
+            geolocation.watchPosition();
+            AMap.event.addListener(geolocation, 'complete', onComplete); //返回定位信息
+            AMap.event.addListener(geolocation, 'error', onError); //返回定位出错信息
+        });
+
+        function onComplete(data) {
+            let lat=data.position.getLat(),lng=data.position.getLng();
+            if(isInit){
+                isInit=false;
+                map.panTo([lng,lat]);
+                markerList=createBox([lng,lat],5)               
+                map.add(markerList)
+            }
+            document.getElementById('refresh').onclick=function(){
+                map.remove(markerList)
+                markerList=createBox([lng,lat],5);
+                map.add(markerList)
+            }
+        }
+
+        function onError(data) {
+            alert('错误')
+        }
+
+        function createBox(center,count=1){
+            let markerList=[];
+            for(let i=0;i<count;i++){
+                let positionLng=Math.random()*0.001*(Math.random()<=0.5?-1:1),positionLat=Math.random()*0.001*(Math.random()<=0.5?-1:1);
+                let marker=new AMap.Marker({
+                    position: [center[0]+positionLng,center[1]+positionLat],
+                    content: content,  // 自定义点标记覆盖物内容
+                    offset: new AMap.Pixel(0,0) // 相对于基点的偏移位置     
+                });
+                marker.on('click',()=>{
+                    alert(`这是第${i+1}个宝箱`)
+                });
+                markerList.push(marker);
+            }
+            return markerList
+        }
+    </script>
+</body>
+
+</html>

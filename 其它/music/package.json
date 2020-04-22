@@ -1,0 +1,63 @@
+{
+  "name": "react-music",
+  "version": "1.0.0",
+  "description": "react music app",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "webpack-dev-server --config build/webpack.config.dev.js --hot",
+    "build": "npm run clean && webpack --config build/webpack.config.prod.js --progress --hide-modules",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "react",
+    "music"
+  ],
+  "author": "Frank Lin",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^8.6.2",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-mobx": "^1.0.3",
+    "babel-preset-react-app": "^3.1.1",
+    "babel-preset-react-hmre": "^1.1.1",
+    "body-parser": "^1.18.3",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.9.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.9.0",
+    "postcss-loader": "^2.1.5",
+    "rimraf": "^2.6.2",
+    "sass-loader": "^7.0.3",
+    "style-loader": "^0.21.0",
+    "svg-sprite-loader": "^3.8.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^2.11.2",
+    "webpack-merge": "^4.1.2"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "better-scroll": "^1.12.0",
+    "classnames": "^2.2.6",
+    "js-base64": "^2.4.5",
+    "jsonp": "^0.2.1",
+    "mobx": "^4.3.1",
+    "mobx-react": "^5.2.3",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-router-dom": "^4.3.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:HQ-Lin/react-music.git"
+  }
+}

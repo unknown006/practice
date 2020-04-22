@@ -1,0 +1,15 @@
+$theme:red;
+.container{
+    box-sizing:border-box;
+    padding:10px;
+    background:$theme;
+    width:400px;
+    height:400px;
+    color:white;
+    margin:50px auto 0 auto;
+    .menu-container{
+        display:flex;
+        justify-content: space-around;
+        align-items: stretch;
+    }
+}

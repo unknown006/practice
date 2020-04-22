@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input id="file" type="file" onchange="read(window.event)">
+    <script src="https://cdn.bootcss.com/xlsx/0.15.1/xlsx.full.min.js"></script>
+    <script>
+        function read(e){
+            let fr=new FileReader()
+            let file=e.target.files[0]
+            let file2=document.getElementById('file').files[0]
+            console.log(file==file2,'file')
+            console.dir(e.target)
+            console.dir(document.getElementById('file'))
+            fr.readAsArrayBuffer(file)
+            fr.onload=function(){
+                let wb=XLSX.read(this.result,{
+                    type:'buffer',
+                    cellHTML:false,
+                })
+                console.log(wb)
+            }
+            //下来你就会了 就是对表格一系列操作,然后导出等等
+
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let arr=[1,1,3,3,2,2,5,5,6,6];
+        let arr2=[1,2,3]
+        let set=new Set(arr);
+        set.add(7)
+        console.log(set.size,set.delete(1),set.has(2),set.values())
+        let set2=new Set(arr.filter((elem,i,arr)=>{
+            return set.has(elem);
+        }))
+        console.log([...set2])
+        
+        //WeakSet只能将对象作为元素
+        let obj={a:1,b:2}  
+        //保证了地址唯一 
+        let arr3=[obj,obj,{a:2,b:3},{a:3,b:4}]
+        let wkSet=new WeakSet(arr3);
+        console.log(wkSet)
+        function a(){
+            console.log(123)
+        }
+        function b(){
+            console.log(456)
+        }
+        let arr4=[a,b,b]
+        let wkSet2=new WeakSet(arr4)
+        console.log(wkSet2)
+
+        //weakMap
+        let obj
+    </script>
+</body>
+</html>

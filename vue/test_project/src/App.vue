@@ -22,4 +22,7 @@
     }
   }
 }
+#nprogress .bar{
+  background:lightcoral !important;
+}
 </style>

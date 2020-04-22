@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let date=new Date()
+        date.setTime((date.getTime()-1))
+        document.cookie='test=1'
+        document.cookie='test2=2'
+        document.cookie=`test=3;expires=${date.toUTCString()};`
+        console.log(date.getTime())
+    </script>
+</body>
+</html>

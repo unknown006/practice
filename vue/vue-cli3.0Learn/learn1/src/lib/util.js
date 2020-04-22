@@ -1,0 +1,1 @@
+export const setTitle = str => str && (document.title=str);

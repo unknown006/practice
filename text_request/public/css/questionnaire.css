@@ -1,0 +1,369 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+ul{
+    list-style: none;
+}
+textarea::-webkit-input-placeholder,input::-webkit-input-placeholder{
+    color:#ACACAC;
+    font-size:0.26rem;
+}
+input{
+    border:0;
+    outline:0;
+}
+input:focus{
+    outline:0;
+    border:0;
+}
+button{
+    border:0;
+}
+button:focus{
+    outline:0;
+}
+a{
+    text-decoration:none;
+}
+.btn-lg{
+    width:80%;
+    height:7%;
+    display:block;
+    margin:0 auto;
+}
+.primary{
+    background:#28CA82;
+    color:#FFF;
+}
+.round{
+    border-radius:0.1rem;
+}
+body{
+    width:100%;
+    height:100vh;
+    color:#333;
+    position:relative;
+}
+.container{
+    height:100%;
+    position:relative;
+}
+/* .container>header{
+    width:100%;
+    background:#FFF;
+    border-bottom:1px solid #EEE;
+    position:fixed;
+    top:0;
+    z-index:100;
+}
+.container>header>.title{
+    width:40%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:30%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.container>header>.title>span{
+    font-size:0.38rem;
+    font-weight:bold;
+} */
+.container>section{
+    position:fixed;
+    top:0;
+    height:calc(100vh - 1.5rem);
+    background:#F7F7F7;
+    overflow-y:auto;
+}
+.container>section>header{
+    box-sizing:border-box;
+    padding:6% 8%;
+    background:#28CA82;
+    display:flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+.container>section>header>.bg{
+    width:50%;
+    display:flex;
+    align-items: center;
+}
+.container>section>header>.bg>img{
+    width:100%;
+}
+.container>section>header>.details{
+    width:50%;
+    color:#FFF;
+    display:flex;
+    flex-flow:column nowrap;
+    justify-content:flex-start;
+    align-items: center;
+}
+.container>section>header>.details>.title{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    margin-bottom:10%;
+}
+.container>section>header>.details>.title>p{
+    text-align:center;
+    width:100%;
+    font-size:0.38rem;
+    height:100%;
+}
+.container>section>header>.details>.desc{
+    text-align:center;
+    font-size:0.24rem;
+}
+.container>section>section{
+    width:100%;
+}
+.container>section>section>.list{
+    padding:5% 10% 0 10%; 
+}
+.container>section>section>.list>.item:not(:first-child){
+    margin-top:0.8rem;
+}
+.container>section>section>.list>.item:last-child{
+    margin-bottom:0.25rem;
+}
+.container>section>section>.list>.item>.title{
+    font-weight:bold;
+    font-size:0.28rem;
+}
+.container>section>section>.list>.item>.title>span:first-child{
+    width:4%;
+    position:relative;
+    left:-4%;
+    text-align:center;
+    color:red;
+}
+.container>section>section>.list>.item>.options{
+    width:100%;
+    margin-top:0.2rem;
+    border-radius:0.1rem;
+}
+.container>section>section>.list>.item>.options>.option{
+    height:1rem;
+    background:#FFF;
+    display:flex;
+    flex-flow:row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+.container>section>section>.list>.item>.options>.option>*{
+    margin-left:4%;
+}
+.container>section>section>.list>.item>.options>.option:not(:first-child){
+    border-top:1px solid #EEE;
+}
+.container>section>section>.list>.item>.options>.option:first-child{
+    border-top-left-radius:0.1rem;
+    border-top-right-radius: 0.1rem;
+}
+.container>section>section>.list>.item>.options>.option:last-child{
+    border-bottom-left-radius:0.1rem;
+    border-bottom-right-radius:0.1rem;
+}
+.container>section>section>.list>.item>.options>.option>.icon{
+    width:0.34rem;
+    height:0.32rem;
+    background-size:0.3rem 0.3rem;
+    background-position:48% 50%;
+    background-repeat: no-repeat;
+}
+.container>section>section>.list>.item.radio>.options>.option>.icon{
+    background-image:url('../img/icon_task_circle@2x.png');
+}
+.container>section>section>.list>.item.radio>.options>.option.checked>.icon{
+    background-image:url('../img/icon_task_radio@2x.png');
+}
+.container>section>section>.list>.item.checkbox>.options>.option>.icon{
+    background-image:url('../img/icon_task_done@2x.png');
+}
+.container>section>section>.list>.item.checkbox>.options>.option.checked>.icon{
+    background-image:url('../img/icon_task_checkbox_d@2x.png');
+}
+.container>section>section>.list>.item>.options>.option>.text{
+    font-size:0.28rem;
+}
+.container>section>section>.list>.item>.selector{
+    box-sizing:border-box;
+    padding-left:4%;
+    width:100%;
+    height:1rem;
+    background:#FFF;
+    border-radius:0.1rem;
+    margin-top:0.2rem;
+    position:relative;
+}
+.container>section>section>.list>.item>.selector::after{
+    content:'';
+    width:0.2rem;
+    height:0.2rem;
+    display:block;
+    transform:rotate(-45deg);
+    position:absolute;
+    right:5%;
+    top:calc(50% - 0.2rem);
+    border-bottom:2px solid #EEE;
+    border-left:2px solid #EEE;
+}
+.container>section>section>.list>.item>.selector>span{
+    display:block;
+    position:absolute;
+    left:4%;
+    top:0;
+    bottom:0;
+    margin:auto;
+    color:#E3E3E3;
+    height:1rem;
+    line-height:1rem;
+    font-size:0.26rem;
+}
+.container>section>section>.list>.item>.selector>.options{
+    display:none;
+    width:100%;
+    position:absolute;
+    top:1rem;
+    left:0;
+    background:#FFF;
+}
+.container>section>section>.list>.item>.selector>.options>.option{
+    text-align:center;
+    width:100%;
+    padding:0.25rem 0;
+    height:0.4rem;
+    line-height:0.4rem;
+    border-top:1px solid #EEE;
+    font-size:0.24rem;
+}
+.container>section>section>.list>.item.text>.textarea{
+    box-sizing:border-box;
+    padding:4%;
+    width:100%;
+    background:#FFF;
+    border-radius:0.1rem;
+    margin-top:0.25rem;
+    display:flex;
+    align-items: center;
+}
+.container>section>section>.list>.item.text>.textarea>textarea{
+    width:100%;
+    border:none;
+    outline:0;
+    font-size:0.26rem;
+}
+.container>section>section>.list>.item.phone>div:not(.title)>div{
+    box-sizing:border-box;
+    width:100%;
+    height:1rem;
+    padding:0 4%;
+    background:#FFF;
+}
+.container>section>section>.list>.item.phone>.input{
+    border-radius:0.1rem;
+    margin-top:0.25rem;
+}
+.container>section>section>.list>.item.phone>.input>div:first-child{
+    display:flex;
+    align-items: center;
+    border-top-right-radius:0.1rem;
+    border-top-left-radius:0.1rem;
+}
+.container>section>section>.list>.item.phone>.input>div:last-child{
+    display:flex;
+    align-items: center;
+    border-bottom-right-radius:0.1rem;
+    border-bottom-left-radius:0.1rem;
+}
+.container>section>section>.list>.item.phone>.input>div>input{
+    font-size:0.26rem;
+}
+.container>section>section>.list>.item.phone>.input>div.phone-num>input{
+    width:100%;
+    height:100%;
+}
+.container>section>section>.list>.item.phone>.input>div.verify-code{
+    display:flex;
+    justify-content: space-between;
+    align-items: center
+}
+.container>section>section>.list>.item.phone>.input>div.verify-code>input{
+    width:72%;
+    height:100%;
+}
+.container>section>section>.list>.item.phone>.input>.verify-code>button{
+    width:28%;
+    height:100%;
+    background:transparent;
+    color:#28CA82;
+    font-size:0.24rem;
+}
+.container>footer{
+    width:100%;
+    padding:0.3rem 0 0.4rem 0;
+    position:fixed;
+    bottom:0;
+    height:0.8rem;
+    background:#F7F7F7;
+    z-index:0;
+}
+.container>footer>button{
+    height:100%;
+    font-size:0.38rem;
+    border-radius:0.1rem;
+}
+.loading{
+    width:100%;
+    height:100vh;
+    position:fixed;
+    background:#FFF;
+    top:0;
+    left:0;
+    opacity:0.8;
+    z-index:10;
+    display:none;
+}
+.loading>img{
+    width:50%;
+    display:block;
+    position:absolute;
+    top: 0;
+    left:0;
+    right:0;
+    bottom: 0;
+    margin:auto;
+}
+.fail{
+    width:80%;
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin:auto;
+    display:none;
+}
+.fail>div{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-flow:column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.fail>div>img{
+    width:100%;
+    margin-bottom:0.4rem;
+}
+.fail>div>p{
+    width:100%;
+    text-align:center;
+    font-size:0.38rem;
+}

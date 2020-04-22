@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./incubator-echarts-4.2.1/dist/echarts.min.js"></script>
+    <canvas id="canvas" width="1000" height="800" ></canvas>
+    <script>
+        let canvas=document.getElementById('canvas');
+        let myCharts=echarts.init(canvas);
+        let data=[
+            {value:98,name:'张三'},
+            {value:50,name:'李四'},
+            {value:32,name:'王五'},
+            {value:10,name:'小二'},
+            {value:30,name:'赵四'},
+            {value:50,name:'尼古拉斯'},
+        ];
+        let xAxis=getXAxis(data),yAxis=getYAxis(data);
+        function getXAxis(data){
+            let xAxis=[];
+            data.forEach((elem)=>{
+                xAxis.push(elem.name);
+            })
+            return xAxis;
+        }
+        function getYAxis(data){
+            let yAxis=[];
+            data.forEach((elem)=>{
+                yAxis.push(elem.value);
+            })
+            return yAxis;
+        }
+        function getColors(data){
+            let colorArr=[];
+            let max=data.reduce((res,elem)=>{ 
+                return elem.value>res ? elem.value : res;
+            },0)
+            data.forEach((elem)=>{
+                let percent=elem.value/max;
+                colorArr.push(`rgba(106,96,169,${percent})`);
+            })
+            return colorArr;
+        }
+        let color=getColors(data);
+        let barOptions={
+            xAxis:{
+                type:'category',
+                data:xAxis,
+            },
+            yAxis:{
+                type:'value',
+            },
+            legend:{
+                orient:'vertical',
+                data:xAxis,
+                right:0,
+                bottom:120,
+            },
+            series:[
+                {
+                    name:'积分排行Top6',
+                    type:'bar',
+                    color,
+                    data:yAxis,
+                },
+            ],
+        }
+        let lineOptions={
+            xAxis:{
+                type:'category',
+                data:xAxis,
+            },
+            yAxis:{
+                type:'value',
+            },
+            legend:{
+                orient:'vertical',
+                data:xAxis,
+                right:0,
+                bottom:120,
+            },
+            series:[
+                {
+                    name:'积分排行Top6',
+                    type:'line',
+                    color,
+                    data:yAxis,
+                },
+            ],
+        }
+        let pieOptions={
+            legend:{
+                orient:'vertical',
+                data:xAxis,
+                right:0,
+                bottom:140,
+            },
+            series:[
+                {
+                    name:'积分排行Top6',
+                    type:'pie',
+                    radius:'60%',
+                    center:['50%','50%'],
+                    label:{
+                        color:'#333',
+                        fontWeight:'bold',
+                        fontSize:'16',
+                        formatter:'{b}:{c}分\n\n{d}%',
+                        position:'outer',
+                        align:'center',
+                    },
+                    labelLine:{
+                        length:20,
+                        length2:30,
+                        lineStyle:{
+                            color:'#BBB',
+                        },
+                    },
+                    color,
+                    data,
+                },
+            ],
+        }
+        myCharts.setOption(lineOptions);
+
+        let imgData=canvas.toDataURL('image/png');
+        function dataURLtoBlob(data){
+            let imgBase64=data.split(',')[1];
+            let mime=data.split(',')[0].match(/:(.*?);/)[1];
+            let bstr=atob(imgBase64),n=bstr.length,u8arr=new Uint8Array(n);
+            while(n--){
+                u8arr[n]=bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr],{type:mime});
+        }
+        let img=new File([dataURLtoBlob(imgData)],'new_image');
+        let formData=new FormData();
+        let config={
+            headers:{'Content-Type':'multipart/form-data'}
+        }
+        formData.append('canvasImg',img)
+        formData.append('text','551165468468')
+        console.log()
+        axios.post('http://localhost:3000/uploadImg',formData,config)
+        .then(({data})=>{
+            console.log(data);
+        })
+    </script>
+</body>
+</html>

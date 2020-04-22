@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title id="title">问卷调查</title>
+    <link rel="stylesheet" href="./css/questionnaire.css">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b4f6757eccbda59cddb10b86b2988b31";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <section>
+            <header>
+                <div class="bg">
+                    <img src="./img/tu@2x.png" alt="图片加载失败...">
+                </div>
+                <div class="details">
+                    <div class="title">
+                        <p></p>
+                    </div>
+                    <p class="desc"></p>
+                </div>
+            </header>
+            <section>
+                <ul class="list">
+                    <!-- <li class="item radio">
+                        <div class="title">
+                            <span>*</span><span>1</span>、<span>您的性别</span>
+                        </div>
+                        <ul class="options">
+                            <li class="option checked">
+                                <i class="icon"></i>
+                                <span class="text">男</span>
+                            </li>
+                            <li class="option">
+                                <i class="icon"></i>
+                                <span class="text">女</span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="item checkbox">
+                        <div class="title">
+                            <span>*</span><span>2</span>、<span>您通过什么渠道了解？</span>
+                        </div>
+                        <ul class="options">
+                            <li class="option checked">
+                                <i class="icon"></i>
+                                <span class="text">报纸</span>
+                            </li>
+                            <li class="option">
+                                <i class="icon"></i>
+                                <span class="text">电视广告</span>
+                            </li>
+                            <li class="option checked">
+                                <i class="icon"></i>
+                                <span class="text">朋友告知</span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="item select">
+                        <div class="title">
+                            <span>*</span><span>3</span>、<span>您所在的分公司？</span>
+                        </div>
+                        <div class="selector">
+                            <span>请选择单位</span>
+                            <ul class="options">
+                                <li class="option">蛤蛤1</li>
+                                <li class="option">蛤蛤2</li>
+                                <li class="option">蛤蛤3</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="item text">
+                        <div class="title">
+                            <span>*</span><span>4</span>、<span>您的建议？</span>
+                        </div>
+                        <div class="textarea">
+                            <textarea rows="2" placeholder="请填写内容"></textarea>
+                        </div>
+                    </li>
+                    <li class="item phone">
+                        <div class="title">
+                            <span>*</span><span>4</span>、<span>填写手机号</span>
+                        </div>
+                        <div class="input">
+                            <div class="phone-num">
+                                <input type="number" placeholder="请输入手机号码">
+                            </div>
+                            <div class="verify-code">
+                                <input type="number" placeholder="请输入验证码">
+                                <button>获取验证</button>
+                            </div>
+                        </div>
+                    </li> -->
+                </ul>
+            </section>
+        </section>
+        <footer>
+            <button class="btn-lg primary">提交</button>
+        </footer>
+        <div class="loading">
+            <img src="./img/loading.gif" alt="图片加载失败...">
+        </div>
+        <div class="fail">
+            <div>
+                <img src="./img/tingyong@2x.png" alt="图片加载失败...">
+                <p>无法获取问卷信息！</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- 埋点 -->
+    <script src="https://jssdk.baojunev.com/sdk/buryingpoint-0.0.1-dev.js" ></script>
+    <!-- 主文件 -->
+    <script src="./js/questionnaire.js"></script>
+    <!-- debug工具 -->
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+</body>
+
+</html>

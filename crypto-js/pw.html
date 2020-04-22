@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./axios.min.js"></script>
+    <script src="./crypto-js.js"></script>
+</head>
+<body>
+    <button onclick="handleClick()">生成</button>
+    <script>
+        const baseUrl = 'https://kgw.baojunev.com/outer/test/alice_personnelmgmt/api/';
+        // axios的实例及拦截器配置
+        const axiosInstance = axios.create({
+          baseURL: baseUrl
+        });
+        axiosInstance.interceptors.request.use(config => {
+          config.headers = {
+            Authorization:'Basic NTA1NTpzZ213NTA1MA=='
+          }
+          // console.log(config,"拦截器")
+          return config;
+        });
+        axiosInstance.interceptors.response.use(
+          res => res.data,
+          err => {
+            console.log(err, "网络错误");
+          }
+        );
+        function generateCodeChallenge(code_verifier) {
+          return code_challenge = base64URL(CryptoJS.SHA256(code_verifier))
+        }
+        function base64URL(string) {
+          return string.toString(CryptoJS.enc.Base64).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+        }
+        function randomNum() {
+          var d = Date.now();
+          if (
+            typeof performance !== "undefined" &&
+            typeof performance.now === "function"
+          ) {
+            d += performance.now(); //use high-precision timer if available
+          }
+          return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+          });
+        }
+        function handleClick(){
+            let ran = randomNum();
+            let b64 = generateCodeChallenge(ran);
+            axiosInstance.get(`/login/temp-code?codeChallenge=${b64}`).then((res)=>{
+                console.log(`?uuid=${res}&pw=${ran}`)
+            })
+        }
+        console.log(atob('NTA1NTpzZ213NTA1MA=='))
+        
+    </script>
+</body>
+</html>
